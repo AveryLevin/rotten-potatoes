@@ -18,9 +18,9 @@ class MoviesController < ApplicationController
       if session[:filtered_ratings] == nil
         filtered_ratings = @all_ratings
       else
-        changed = true
         filtered_ratings = session[:filtered_ratings]
       end
+      changed = true
     else
       filtered_ratings = filtered_ratings.keys
     end
