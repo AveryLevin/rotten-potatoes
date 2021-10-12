@@ -28,7 +28,7 @@ class MoviesController < ApplicationController
     if sort_by == nil
       # if sort_by not passed in param, attempt to use save sort_by
       sort_by = session[:sort_by]
-      changed = (session[:sort_by] != nil)
+      changed =  changed or (session[:sort_by] != nil)
     end
     
     if changed
