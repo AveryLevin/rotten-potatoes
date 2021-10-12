@@ -32,7 +32,7 @@ class MoviesController < ApplicationController
     end
     
     if changed
-      redirect_to movies_path({sort_by: sort_by, ratings: Hash[filtered_ratings.collect{ |rtg| [rtg, 1] }]})
+      return redirect_to movies_path({sort_by: sort_by, ratings: Hash[filtered_ratings.collect{ |rtg| [rtg, 1] }]})
     end
     
     @movies = Movie.with_ratings(filtered_ratings, sort_by)
