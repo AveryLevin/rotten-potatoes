@@ -7,27 +7,39 @@ class MoviesController < ApplicationController
   end
 
   def index
+    
     filtered_ratings = params[:ratings] 
     sort_by = params[:sort_by]
     @all_ratings = Movie.all_ratings
+    
     if filtered_ratings == nil
-      filtered_ratings = @all_ratings
+      # if ratings filter not passed in param, attempt to use saved filter
+      if session[:filtered_ratings] == nil
+        filtered_ratings = @all_ratings
+      else
+        filtered_ratings = session[:filtered_ratings]
+      end
     else
       filtered_ratings = filtered_ratings.keys
     end
+    
+    if sort_by == nil
+      # if sort_by not passed in param, attempt to use save sort_by
+      sort_by = session[:sort_by]
+    end
+    
     @movies = Movie.with_ratings(filtered_ratings, sort_by)
     @ratings_to_show = filtered_ratings
     
-    puts sort_by
     if sort_by == 'title'
-      @title_hdr_class = 'hilite bg-warning'
-      
+      @title_hdr_class = 'hilite bg-warning'      
     elsif sort_by == 'release_date'
       @release_hdr_class = 'hilite bg-warning'
-      
     end
-    puts @title_hdr_class
-    puts @release_hdr_class
+      
+    # save the session
+    session[:filtered_ratings] = filtered_ratings
+    session[:sort_by] = sort_by
     
   end
 
