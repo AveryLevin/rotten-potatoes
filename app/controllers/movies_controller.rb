@@ -8,6 +8,7 @@ class MoviesController < ApplicationController
 
   def index
     
+    changed = false
     filtered_ratings = params[:ratings] 
     sort_by = params[:sort_by]
     @all_ratings = Movie.all_ratings
@@ -17,6 +18,7 @@ class MoviesController < ApplicationController
       if session[:filtered_ratings] == nil
         filtered_ratings = @all_ratings
       else
+        changed = true
         filtered_ratings = session[:filtered_ratings]
       end
     else
@@ -26,6 +28,11 @@ class MoviesController < ApplicationController
     if sort_by == nil
       # if sort_by not passed in param, attempt to use save sort_by
       sort_by = session[:sort_by]
+      changed = (session[:sort_by] != nil)
+    end
+    
+    if changed
+      redirect_to movies_path({sort_by: sort_by, ratings: Hash[filtered_ratings.collect{ |rtg| [rtg, 1] }]})
     end
     
     @movies = Movie.with_ratings(filtered_ratings, sort_by)
